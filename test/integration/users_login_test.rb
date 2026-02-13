@@ -15,9 +15,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   test "should redirect to sign-in page after invalid login" do
     get root_url
-    post user_session_url, params: {user: {email: "", password: ""}}
+    post user_session_url, params: {user: {email: "wrongemail@example.com", password: ""}}
     assert_response :unprocessable_entity
-    assert_match "Invalid Email or password.", response.body
+    assert_match "Invalid email or password.", response.body
   end
 
 
