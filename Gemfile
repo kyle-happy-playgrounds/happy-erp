@@ -95,5 +95,3 @@ gem 'ostruct', '~> 0.1.0'
 gem 'logger', '~> 1.6'
 
 gem 'geocoder', '~> 1.8', '>= 1.8.5'
-
-gem 'cgi'
