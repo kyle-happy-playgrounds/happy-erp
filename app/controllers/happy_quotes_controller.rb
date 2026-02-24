@@ -44,6 +44,8 @@ include Reminder
      @happyquote = HappyQuote.new
      @happyvendors = HappyVendor.all.order("vendor_name asc")
      @happycustomer = HappyCustomer.find(params[:happy_customer_id])
+     @happycustomer_company = HappyCustomerCompany.find(@happycustomer.happy_customer_company_id)
+     @address_type = check_address_type
      if params[:shipaddress_same_billaddress]
           @happyquote.shipping_street1 = @happycustomer.mailing_street1
           @happyquote.shipping_street2 = @happycustomer.mailing_street2
@@ -94,7 +96,8 @@ include Reminder
 
     @happyquotevendors=HappyQuoteLine.joins(:happy_vendor).where("happy_quote_id =?",params[:happy_quote_id]).distinct.select('happy_vendor_id','happy_vendors.vendor_name', 'first_name') 
     @happyquote = HappyQuote.includes(:happy_customer).includes(:happy_quote_lines).order("happy_quote_lines.position asc").find(params[:id])
- 
+    @happycustomer_company = HappyCustomerCompany.find(@happycustomer.happy_customer_company_id)
+    @address_type = check_address_type
 
      @happyquote.update_column(:total, @quotetotal)
 
@@ -133,6 +136,8 @@ include Reminder
      end
      puts @happyquote.happy_customer_id
      @happycustomer = HappyCustomer.find(@happyquote.happy_customer_id)
+     @happycustomer_company = HappyCustomerCompany.find(@happycustomer.happy_customer_company_id)
+     @address_type = check_address_type
      @useremail = current_user.email
      @quoteTaxTotal = HappyQuoteLine.where("happy_quote_id =? and taxable = ?",params[:id],true).sum('total_line_amount')
      if params[:product_id]
@@ -501,6 +506,22 @@ def start_create
 end
 
 private
+
+  def check_address_type
+    companyAddress = [@happycustomer_company.customer_street1, @happycustomer_company.customer_street2,
+     @happycustomer_company.customer_city, @happycustomer_company.customer_state, @happycustomer_company.customer_zipcode ]
+    customerAddress = [@happycustomer.mailing_street1, @happycustomer.mailing_street2, @happycustomer.mailing_city,
+      @happycustomer.mailing_state, @happycustomer.mailing_zipcode]
+    quoteAddress = [@happyquote.mailing_street1, @happyquote.mailing_street2, @happyquote.mailing_city,
+      @happyquote.mailing_state, @happyquote.mailing_zipcode]
+    if quoteAddress == customerAddress
+      "Customer Address"
+    elsif quoteAddress == companyAddress
+      "Company Address"
+    else
+      nil
+    end
+  end
 
   def find_quote
     @happyquote = HappyQuote.includes(:happy_customer).includes(:happy_quote_lines).order("happy_quote_lines.position asc").find(params[:id])

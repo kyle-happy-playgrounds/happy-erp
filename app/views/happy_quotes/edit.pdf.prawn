@@ -299,16 +299,16 @@ end
   	pdf.text_box @happyquote.shipping_street2, :at => [quote_header_x,  pdf.cursor]
   end
   pdf.move_down lineheight_y
-  pdf.text_box @happyquote.happy_customer.mailing_street1, :at => [address_x,  pdf.cursor]
+  pdf.text_box @happyquote.mailing_street1, :at => [address_x,  pdf.cursor]
   if !@happyquote.shipping_street2.blank? 
   	pdf.text_box @happyquote.shipping_city + ", " + @happyquote.shipping_state + " " + @happyquote.shipping_zipcode, :at => [quote_header_x,  pdf.cursor]
   end
-  if !@happyquote.happy_customer.mailing_street2.blank? 
+  if !@happyquotemailing_street2.blank? 
   	pdf.move_down lineheight_y
-  	pdf.text_box @happyquote.happy_customer.mailing_street2, :at => [address_x,  pdf.cursor]
+  	pdf.text_box @happyquote.mailing_street2, :at => [address_x,  pdf.cursor]
   end
   pdf.move_down lineheight_y
-  pdf.text_box @happyquote.happy_customer.mailing_city + ", " + @happyquote.happy_customer.mailing_state + " " + @happyquote.happy_customer.mailing_zipcode, :at => [address_x,  pdf.cursor]
+  pdf.text_box @happyquote.mailing_city + ", " + @happyquote.mailing_state + " " + @happyquote.mailing_zipcode, :at => [address_x,  pdf.cursor]
 
   #pdf.move_cursor_to 37.0 # was 53 no idea why had to hardcode was pdf.move_cursor_to last_measured_y
   #pdf.move_up 50

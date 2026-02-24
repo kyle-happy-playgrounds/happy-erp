@@ -104,14 +104,15 @@
 <div class="row">
   <div class="col-8">
       <p>
-      <b>BILL TO:</b><br>
+      <b>BILL TO:</b> &nbsp;<span><b><small>(<%= @address_type.split[0] %>)</small></b></span> <br>
+      <!-- <b>BILL TO:</b> &nbsp;<span class="badge rounded-pill bg-secondary px-1 py-1 small"><%= @address_type.split[0] %></span> <br>> -->
       <%= @happyquote.happy_customer.customer_name %><br>
       Attention: <%= @happyquote.happy_customer.first_name %> <%= @happyquote.happy_customer.last_name %><br>
-      <%= @happyquote.happy_customer.mailing_street1 %><br>
-      <% if @happyquote.happy_customer.mailing_street2? %>
-        <%= @happyquote.happy_customer.mailing_street2 %><br>
+      <%= @happyquote.mailing_street1 %><br>
+      <% if @happyquote.mailing_street2? %>
+        <%= @happyquote.mailing_street2 %><br>
       <% end %>
-      <%= @happyquote.happy_customer.mailing_city %> <%= @happyquote.happy_customer.mailing_state%> <%= @happyquote.happy_customer.mailing_zipcode %>
+      <%= @happyquote.mailing_city %> <%= @happyquote.mailing_state%> <%= @happyquote.mailing_zipcode %>
       </p>
   </div>
   <div class="col-2">

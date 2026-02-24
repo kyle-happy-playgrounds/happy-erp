@@ -22,7 +22,10 @@
 
 
   <h3>Edit Quote Header</h3>
-  <div class='header' data-controller='newquoteheader'> 
+  <div class='header' data-controller='newquoteheader'
+    data-newquoteheader-customer-value="<%= @happycustomer.to_json %>"
+    data-newquoteheader-company-value="<%= @happycustomer_company.to_json %>"
+    data-newquoteheader-quote-value="<%= @happyquote.to_json %>"> 
   <%= link_to "Copy Quote", happy_quote_copy_path(:happy_quote_id => @happyquote.id,:number => @happyquote.number)  %>
 
   <div class="row">
@@ -59,11 +62,19 @@
     <div class="col-3">
       <h3>Shipping Address</h3>
     </div>
-    <div class="col-3">
+    <div class="col-3 d-flex align-items-center">
        <%= f.input :shipaddress_same_billaddress, label: "Same as Billing Address", :as => :boolean, input_html: { data: {'newquoteheader-target': 'ship_same_bill', action: 'newquoteheader#toggleAddress' }} %> 
     </div>
-    <div class="col-6">
+    
+    <div class="col-3">
         <h3>Billing Address</h3>
+    </div>
+    <div class="col-3 d-flex align-items-center" >
+      <label for="address_source" class="me-2 mb-0">Source:</label>
+          <%= select_tag :address_source,
+         options_for_select([['Customer Address','Customer Address'], ['Company Address', 'Company Address']], @address_type),
+         class: 'form-control',
+         data: {action: "change->newquoteheader#updateAddress", 'newquoteheader-target': "address_source" } %>
     </div>
   </div>
   <div class="row">

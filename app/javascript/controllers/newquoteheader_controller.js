@@ -9,9 +9,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [ "ship_same_bill", "shipping_street1", "shipping_street2", "shipping_city", "shipping_state","shipping_zipcode", "mailing_street1", "mailing_street2", "mailing_city", "mailing_state","mailing_zipcode", "taxRate","taxTotal", "taxAmount", "taxable", "total", "totalTaxAmount"]
+
+	static values = {
+    customer: Object,
+    company: Object,
+	quote: Object
+  }
+  static targets = [ "address_source", "ship_same_bill", "shipping_street1", "shipping_street2", "shipping_city", "shipping_state","shipping_zipcode", "mailing_street1", "mailing_street2", "mailing_city", "mailing_state","mailing_zipcode", "taxRate","taxTotal", "taxAmount", "taxable", "total", "totalTaxAmount"]
 
   connect() {
+	this.updateAddress()
     this.toggleAddress()
 	  //console.log("QuoteHeaderConnect1", this.element)
 	  //console.log("QuoteHeaderConnect2", this.sourceTarget)
@@ -24,6 +31,35 @@ export default class extends Controller {
   //subtot() {
 //	  console.log("subtot", this.sourceTargets)
   //}
+
+  updateAddress(){
+	const selection = this.address_sourceTarget.value
+    const input = this.mailing_street1Target
+	const mailingFields = [this.mailing_street1Target, this.mailing_street2Target, this.mailing_zipcodeTarget,
+	this.mailing_cityTarget, this.mailing_stateTarget]
+	const shippingFields = [this.shipping_street1Target, this.shipping_street2Target, this.shipping_zipcodeTarget,
+	this.shipping_cityTarget, this.shipping_stateTarget]
+
+    if (selection === 'Customer Address') {
+      this.mailing_street1Target.value = this.customerValue.mailing_street1
+	  this.mailing_street2Target.value = this.customerValue.mailing_street2
+	  this.mailing_zipcodeTarget.value = this.customerValue.mailing_zipcode
+	  this.mailing_cityTarget.value = this.customerValue.mailing_city
+	  this.mailing_stateTarget.value = this.customerValue.mailing_state
+      mailingFields.forEach(f => f.readOnly = true)
+    } else if (selection === 'Company Address') {
+      this.mailing_street1Target.value = this.companyValue.customer_street1
+	  this.mailing_street2Target.value = this.companyValue.customer_street2
+	  this.mailing_zipcodeTarget.value = this.companyValue.customer_zipcode
+	  this.mailing_cityTarget.value = this.companyValue.customer_city
+	  this.mailing_stateTarget.value = this.companyValue.customer_state
+      mailingFields.forEach(f => f.readOnly = true)
+    }
+
+	const isSame = mailingFields.every((val, index) => val.value === shippingFields[index].value)
+	this.ship_same_billTarget.checked = isSame
+	
+  }
 
   toggleAddress() {
 
