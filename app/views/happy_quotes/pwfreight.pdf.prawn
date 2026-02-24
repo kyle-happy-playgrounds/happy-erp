@@ -5,8 +5,12 @@ test = "PWfreight-"+@happyvendor.vendor_name+"-"+@happyvendor.id.to_s+"-"+@happy
 
 #test = @happyquote.happy_customer.customer_name+"-"+@happyquote.id.to_s+"-"+DateTime.now.in_time_zone("Central Time (US & Canada)").strftime('%m-%d-%Y-%H%M%S').to_s+".pdf"
 #test = "tmp/test.pdf"
+#
+#
+#
 
-prawn_document(filename: test, disposition: "attachment") do |pdf|
+
+prawn_document(filename: test, disposition: "attachement") do |pdf|
 #prawn_document() do |pdf|
 
   logopath = 'HP_Logo.jpg'     
@@ -14,7 +18,7 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
   initialmove_y = 5            
   address_x = 0                
   freight_table1_x = 0         
-  freight_table2_x = 325         
+  freight_table2_x = 300         
   quote_header_x = 325         
   quote_certs_x = 355          
   lineheight_y = 12            
@@ -25,20 +29,30 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
   
         #pdf.text pdf.cursor, :size => 14
         # header
-        pdf.bounding_box [pdf.bounds.left, pdf.bounds.top], :width  => pdf.bounds.width do
+      pdf.bounding_box [pdf.bounds.left, pdf.bounds.top], :width  => pdf.bounds.width do
           
-  		pdf.text "PLAYWORLD FREIGHT QUOTE FORM", align: :center, size: 14, style: :bold
-  		pdf.fill_color "0093DD"
-  		pdf.text "freight@playworld.com", align: :center, size: 12, style: :bold
-  		pdf.fill_color "000000"
-  		pdf.text "LTL FREIGHT QUOTES VALID FOR 60 DAYS", align: :center, size: 14, style: :bold
-  		pdf.text "Truckload/Direct Ship Quotes Valid 30 DAYS", align: :center, size: 14, style: :bold
-                pdf.move_down 12
+        pdf.text "PLAYWORLD FREIGHT QUOTE FORM", align: :center, size: 12, style: :bold
+        
+        #underline (<u> tag looks a bit off )
+        width = 218
+        x = (pdf.bounds.width - width) / 2
+        y = pdf.cursor + 3 
+        pdf.stroke_line [x, y], [x + width, y]
+
+        pdf.text "freight@playworld.com", align: :center, size: 11, style: :bold, color: "0093DD"
+        pdf.fill_color "000000"
+        highlight = PdfHelper::HighlightCallback.new(color: 'ff9075', document: pdf)
+            pdf.formatted_text(
+        [{ text: "LTL FREIGHT QUOTES VALID FOR 6 MONTHS", callback: highlight}
+        ], size: 12, align: :center, style: :bold)
+        pdf.text "Truckload/Direct Ship Quotes Valid 30 DAYS", align: :center, size: 12, style: :bold
+        pdf.move_down 12
 
   $submitted_by = @username.gsub(/\./,' ')
 
+
   table1_header_data = [ 
-    ["DISTRIBUTOR:", "Happy Playgrounds"],
+    ["REPRESENTATIVE:", "Happy Playgrounds"],
     ["SUBMITTED BY:", $submitted_by],
     ["DATE:", " "]
   ]
@@ -47,6 +61,14 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
     style(row(0..2).columns(0..1), :padding => [1, 5, 1, 5], :borders => [:top, :left, :right, :bottom])
     style(column(1), :align => :left, :width => 172)
   end
+
+  highlight = PdfHelper::HighlightCallback.new(color: 'ff9075', document: pdf)
+  pdf.formatted_text_box(
+  [{ text: "*Sales/Promotions with free freight items "},
+    {text: "only", callback:highlight, styles: [:underline]},
+    { text: " do not require a freight quote.\n\n*List part # and description below"}
+  ], size: 9, align: :left, style: :bold, at: [freight_table2_x, pdf.cursor + 40])
+
 
   pdf.move_down 12
   $cityState =  @happyquote.shipping_city + ", " + @happyquote.shipping_state;
@@ -61,7 +83,7 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
 
   pdf.table(table1_header_data, :position => freight_table1_x, :width => 280, :cell_style => { :size => 10 }) do
     style(row(0..2).columns(0..1), :padding => [1, 5, 1, 5], :borders => [:top, :left, :right, :bottom])
-    style(column(1), :align => :left)
+    style(column(1), :align => :left, :width => 172)
   end
 
   pdf.move_cursor_to 60.0
@@ -91,17 +113,21 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
      #body
      pdf.move_down 20
      #pdf.text pdf.bounds.top, :size => 14
-     pdf.bounding_box [pdf.bounds.left, (pdf.bounds.top - 220)], :width  => pdf.bounds.width + 30, :height => 580 do
+     pdf.bounding_box [pdf.bounds.left, (pdf.bounds.top - 200)], :width  => pdf.bounds.width + 30, :height => 580 do
      pdf.text "FREIGHT DETAILS:", align: :center, size: 11, style: :bold
      #pdf.text "(ATTACH BOM, DRAWING, OR PRICING SCHEDULE LISTING ALL PRODUCT TO BE SHIPPED BY PLAYWORLD)", align: :center, size: 10
-     pdf.fill_color "ffff00"
-     pdf.fill_rectangle [0,570], 540, 16
-     pdf.fill_color "000000"
-     pdf.text '(ATTACH BOM, DRAWING, OR PRICING SCHEDULE LISTING ALL PRODUCT TO BE SHIPPED BY PLAYWORLD)', align: :center, size: 10
+    #  pdf.fill_color "ffff00"
+    #  pdf.fill_rectangle [0,570], 540, 16
+    #  pdf.fill_color "000000"
+     highlight = PdfHelper::HighlightCallback.new(color: 'ffff00', document: pdf)
+    #pdf.text '(ATTACH BOM, DRAWING, OR PRICING SCHEDULE LISTING ALL PRODUCT TO BE SHIPPED BY PLAYWORLD)', align: :center, size: 10, callback: highlight
+    pdf.formatted_text(
+    [{ text: "(ATTACH BOM, DRAWING, OR PRICING SCHEDULE LISTING ALL PRODUCT TO BE SHIPPED BY PLAYWORLD AND LIST OUT ITEMS BELOW)", callback: highlight}
+    ], size: 10, align: :center)
      #pdf.fill_rectangle [0,600], 200, 100
 
      quote_items_header = ["QTY:", "PRODUCT & DESCRIPTION","WT:"]
-     quote_items_header2 = ["QTY:", "FREE FREIGHT ITEMS","WT:"]
+     quote_items_header2 = ["QTY:", "PRODUCT & DESCRIPTION","WT:"]
 
   quote_items_data = []
   quote_items_data << quote_items_header
@@ -110,113 +136,113 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
 
   $loopCount = 0;
   $weight = 0;
-  $loopCount2 = 0;
   $weight2 = 0;
   @happyquote.happy_quote_lines.map.with_index do |item, index|
-                puts("loop #$loopCount");
-                puts("index #{index}");
-                puts("#{@happyquote.happy_quote_lines.size}");
-                $last_row = @happyquote.happy_quote_lines.size + 1
-                puts("last_row #{$last_row}");
-                #if $loopCount <= 14
-                  if not item.active
-		  	number_with_precision($weight, :precision => 2, :delimiter => ',')
-           	  	quote_items_data << [ item.quantity, item.product_id,number_with_precision((item.weight*item.quantity), :precision => 2, :delimiter => ',') ]
-                	$weight = $weight + (item.weight*item.quantity) 
-			
-           	   	quote_items_data2 << [ " ", " "," " ]
-                	$loopCount +=1;
-                  else
-		  	number_with_precision($weight, :precision => 2, :delimiter => ',')
-           	  	quote_items_data2 << [ item.quantity, item.product_id,number_with_precision((item.weight*item.quantity), :precision => 2, :delimiter => ',') ]
-                	$weight2 = $weight2 + (item.weight*item.quantity) 
-           	   	quote_items_data << [ " ", " "," " ]
-                	$loopCount2 +=1;
-           	  	#quote_items_data2 << [ item.quantity, item.product_id,(item.weight*item.quantity) ]
-           	  end
-                #end
-
+      puts("loop #$loopCount");
+      puts("index #{index}");
+      puts("#{@happyquote.happy_quote_lines.size}");
+      $last_row = @happyquote.happy_quote_lines.size + 1
+      puts("last_row #{$last_row}");
+      #if $loopCount <= 14
+        if $loopCount <= 12
+          number_with_precision($weight, :precision => 2, :delimiter => ',')
+          quote_items_data << [ item.quantity, "#{item.product_id}: #{item.description} ",number_with_precision((item.weight*item.quantity), :precision => 2, :delimiter => ',') ]
+          $weight = $weight + (item.weight*item.quantity) 
+          #quote_items_data2 << [ " ", " "," " ]
+          $loopCount +=1;
+        else
+          number_with_precision($weight, :precision => 2, :delimiter => ',')
+          quote_items_data2 << [ item.quantity, "#{item.product_id}: #{item.description}",number_with_precision((item.weight*item.quantity), :precision => 2, :delimiter => ',') ]
+          $weight2 = $weight2 + (item.weight*item.quantity) 
+          #quote_items_data << [ " ", " "," " ]
+          $loopCount +=1;
+          #quote_items_data2 << [ item.quantity, item.product_id,(item.weight*item.quantity) ]
+        end
   end
 
-  #$remainingCells = 14 - $loopCount
+    $remainingCells = 25 - $loopCount
 
-  #$i=0
+  $i=0
 
-  #while $i < $remainingCells do 
-  #              if $i < (14 - $loopCount)
-  #         	   quote_items_data << [ " ", " "," " ]
-  #              end
-  #     $i +=1
-  #end
+  while $i <= $remainingCells do 
+                if $i <= (12 - $loopCount)
+           	   quote_items_data << [ " ", " "," " ]
+ 		else
+           	   quote_items_data2 << [ " ", " "," " ]
+                end
+       $i +=1
+  end
+      quote_items_data << [ " ", "TOTAL WEIGHT:", number_with_precision($weight, :precision => 2, :delimiter => ',') ]
+      quote_items_data2 << [ " ", "TOTAL WEIGHT:",number_with_precision($weight2, :precision => 2, :delimiter => ',') ]
 
-  #$remainingCells2 = 14 - $loopCount2
-
-  #$i=0
-
-  #while $i < $remainingCells2 do 
-  #              if $i < (14 - $loopCount2)
-  #         	   quote_items_data2 << [ " ", " "," " ]
-  #              end
-  #     $i +=1
-  #end
-
-
-
-           	  	quote_items_data << [ " ", "TOTAL WEIGHT:", number_with_precision($weight, :precision => 2, :delimiter => ',') ]
-           	  	quote_items_data2 << [ " ", "TOTAL WEIGHT:",number_with_precision($weight2, :precision => 2, :delimiter => ',') ]
   		#pdf.fill_color "000000"
           
+    top_y = pdf.cursor
 
-     last_measured_y = pdf.cursor
+    left_bottom  = nil
+    right_bottom = nil
 
-  pdf.table(quote_items_data, :width =>  250, :header => true) do
-    style(row(1..-1).columns(0..-1), :padding => [1, 5, 1, 5], :borders => [:top, :right, :bottom, :left])
-    style(row(0), :font_style => :bold)
-    style(row(0).columns(0..-1), :borders => [:top, :left, :right, :bottom])
-    style(row(0).columns(0), :borders => [:top, :left, :bottom])
-  #  style(row(-1), :border_width => 10)
-    style(column(1..-1), :align => :left)
-    style(column(3..-1), :align => :left)
-    style(column(4..-1), :align => :left)
-    style(column(5..-1), :align => :left)
-    style(column(6..-1), :align => :left)
-    style(columns(0), :width => 50)
-    style(columns(1), :width => 140)
-    style(columns(2), :width => 60)
-    style(row($last_row).columns(1), :text_color => 'FF0000',  :align => :right)
-  end
+    pdf.bounding_box([pdf.bounds.left, top_y], width: 260) do
+      pdf.table(quote_items_data, :width =>  250, :header => true) do
+        style(row(1..-1).columns(0..-1), :padding => [1, 2, 1, 2], :borders => [:top, :right, :bottom, :left])
+        style(columns(1), height: 12.5,size: 8)
+        style(row(0), :font_style => :bold)
+        style(row(0).columns(1), :background_color => 'D4BA8E')
+        style(row(0).columns(0..-1), :borders => [:top, :left, :right, :bottom])
+        style(row(0).columns(0), :borders => [:top, :left, :bottom])
+      #  style(row(-1), :border_width => 10)
+        style(column(1..-1), :align => :left)
+        style(column(3..-1), :align => :left)
+        style(column(4..-1), :align => :left)
+        style(column(5..-1), :align => :left)
+        style(column(6..-1), :align => :left)
+        style(columns(0), :width => 40)
+        style(columns(1), :width => 160)
+        style(columns(2), :width => 50)
+        style(row(-1).columns(1), :text_color => 'FF0000',  :align => :right)
+      end
+      left_bottom = pdf.bounds.height - pdf.cursor
+    end
 
-     pdf.move_cursor_to last_measured_y 
+     #pdf.move_cursor_to last_measured_y 
 
-  pdf.table(quote_items_data2, :width =>  250, :position => 280, :header => true) do
-    style(row(1..-1).columns(0..-1), :padding => [1, 5, 1, 5], :borders => [:top, :right, :bottom, :left])
-    style(row(0), :font_style => :bold)
-    style(row(0).columns(1), :background_color => '1bfc06')
-    style(row(0).columns(0..-1), :borders => [:top, :left, :right, :bottom])
-    style(row(0).columns(0), :borders => [:top, :left, :bottom])
-  #  style(row(-1), :border_width => 10)
-    style(column(1..-1), :align => :left)
-    style(column(3..-1), :align => :left)
-    style(column(4..-1), :align => :left)
-    style(column(5..-1), :align => :left)
-    style(column(6..-1), :align => :left)
-    style(columns(0), :width => 50)
-    style(columns(1), :width => 140)
-    style(columns(2), :width => 60)
-    style(row($last_row).columns(1), :text_color => 'FF0000',  :align => :right)
-  end
+     pdf.bounding_box([pdf.bounds.left + 280, top_y], width: 260) do
+      pdf.table(quote_items_data2, :width =>  250, :header => true) do
+        style(row(1..-1).columns(0..-1), :padding => [1, 2, 1, 2], :borders => [:top, :right, :bottom, :left])
+        style(columns(1), height: 12.5,size: 8)
+        style(row(0), :font_style => :bold)
+        style(row(0).columns(1), :background_color => 'D4BA8E')
+        style(row(0).columns(0..-1), :borders => [:top, :left, :right, :bottom])
+        style(row(0).columns(0), :borders => [:top, :left, :bottom])
+      #  style(row(-1), :border_width => 10)
+        style(column(1..-1), :align => :left)
+        style(column(3..-1), :align => :left)
+        style(column(4..-1), :align => :left)
+        style(column(5..-1), :align => :left)
+        style(column(6..-1), :align => :left)
+        style(columns(0), :width => 40)
+        style(columns(1), :width => 160)
+        style(columns(2), :width => 50)
+        style(row(-1).columns(1), :text_color => 'FF0000',  :align => :right)
+      end
+      right_bottom = pdf.bounds.height - pdf.cursor
+    end
 
+    weight_total = [] 
+    weight_total << ["TOTAL WEIGHT:",number_with_precision($weight + $weight2, :precision => 2, :delimiter => ',')]
 
-            weight_total = [] 
-            weight_total << [number_with_precision($weight, :precision => 2, :delimiter => ','), number_with_precision($weight2, :precision => 2, :delimiter => ',') ]
+lowest_y = top_y - [left_bottom, right_bottom].max
 
-	pdf.table(weight_total, :width =>  200, :position => 180, :header => false) do
+pdf.move_cursor_to lowest_y
+    
+	  pdf.table(weight_total, :width =>  200, :position => 180, :header => false) do
           style(columns(0), :width => 100)
-          style(column(0..-1), :align => :center)
+          style(column(0), :align => :center)
+          style(column(1), :align => :left)
         end
 
 
-     if pdf.cursor < 350
+     if pdf.cursor < 200
         #pdf.text pdf.cursor, :size => 14
         pdf.start_new_page
         #pdf.stroke_horizontal_rule
@@ -258,11 +284,11 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
     style(column(0), :align => :center)
   end
 
-                pdf.move_down 20
-     pdf.draw_text "PLAYWORLD USE:", :at => [130, pdf.cursor], size: 12, style: :bold
-                last_measured_y = pdf.cursor
-                pdf.move_down 12
-                last_measured_y = pdf.cursor
+    pdf.move_down 20
+    pdf.draw_text "PLAYWORLD USE:", :at => [130, pdf.cursor], size: 12, style: :bold
+    last_measured_y = pdf.cursor
+    pdf.move_down 12
+    last_measured_y = pdf.cursor
 
   table3_header_data = [ 
     ["QUOTED BY:", "                          "],
@@ -282,25 +308,32 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
      pdf.move_cursor_to last_measured_y 
 
 
-     	pdf.draw_text "DIRECT SHIP QUOTES REQUIRED FOR THE", :at => [340, pdf.cursor], size: 10, style: :bold
-        pdf.move_down 10
-     	pdf.draw_text "FOLLOWING-PLEASE SUBMIT SEPARATE", :at => [340, pdf.cursor], size: 10, style: :bold
-        pdf.move_down 10
-     	pdf.draw_text "QUOTE:", :at => [340, pdf.cursor], size: 10, style: :bold
-        pdf.move_down 30
-     	#pdf.draw_text "-Cantilever Shade Products", :at => [350, pdf.cursor], size: 9
-        #pdf.move_down 10
-     	pdf.draw_text "-Boulders (except for Raptor Head/Tail and Fossil Jan", :at => [340, pdf.cursor], size: 9
-        pdf.move_down 10
-     	pdf.draw_text "-TimberStacks", :at => [340, pdf.cursor], size: 9
-        pdf.move_down 10
-     	pdf.draw_text "Sculpted Play Items: Jungle Rock Link and Climber,", :at => [340, pdf.cursor], size: 9
-        pdf.move_down 10
-     	pdf.draw_text "Gorilla over Log, Blue Whale and Tail, LadyBug, Log", :at => [340, pdf.cursor], size: 9
-        pdf.move_down 10
-     	pdf.draw_text "Steps, Tree Log, Rabbit, Hammerhead Shark", :at => [340, pdf.cursor], size: 9
-        pdf.move_down 10
-     	pdf.draw_text "-Site Amenities (not ZZXX product)", :at => [340, pdf.cursor], size: 9
+    highlight = PdfHelper::HighlightCallback.new(color: 'ff9075', document: pdf)
+    highlight2 = PdfHelper::HighlightCallback.new(color: 'F2C583', document: pdf)
+    #pdf.text '(ATTACH BOM, DRAWING, OR PRICING SCHEDULE LISTING ALL PRODUCT TO BE SHIPPED BY PLAYWORLD)', align: :center, size: 10, callback: highlight
+    pdf.formatted_text_box(
+    [{ text: "ITEMS REQURING SEPARATE QUOTE:\n\n", callback: highlight},
+    { text: "- Boulders ZZBD",callback: highlight2},
+    { text: "(except for Raptor Head/Tail and Fossil Jam)\n",callback: highlight2},
+    { text: "-TimberStacks\n",callback: highlight2},
+    { text: "-All Sculpted Play Items\n",callback: highlight2},
+    { text: "-Site Amenities from Wabash (not ZZXX product)",callback: highlight2}
+    ], size: 10, align: :left, at: [340, pdf.cursor])
+
+     	# pdf.move_down 50
+     	# #pdf.draw_text "-Cantilever Shade Products", :at => [350, pdf.cursor], size: 9
+      #   #pdf.move_down 10
+     	# pdf.draw_text "-Boulders (except for Raptor Head/Tail and Fossil Jan", :at => [340, pdf.cursor], size: 9
+      #   pdf.move_down 10
+     	# pdf.draw_text "-TimberStacks", :at => [340, pdf.cursor], size: 9
+      #   pdf.move_down 10
+     	# pdf.draw_text "Sculpted Play Items: Jungle Rock Link and Climber,", :at => [340, pdf.cursor], size: 9
+      #   pdf.move_down 10
+     	# pdf.draw_text "Gorilla over Log, Blue Whale and Tail, LadyBug, Log", :at => [340, pdf.cursor], size: 9
+      #   pdf.move_down 10
+     	# pdf.draw_text "Steps, Tree Log, Rabbit, Hammerhead Shark", :at => [340, pdf.cursor], size: 9
+      #   pdf.move_down 10
+     	# pdf.draw_text "-Site Amenities (not ZZXX product)", :at => [340, pdf.cursor], size: 9
 
      end # end for quote table loop
  
