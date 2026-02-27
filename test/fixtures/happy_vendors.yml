@@ -30,6 +30,7 @@ happy_vendor_two:
   taxable: true
   business_phone: "555-555-4567"
   mailing_street1: "54321 N Tusk Lane."
+  mailing_street2: ""
   mailing_city: "tulsa"
   mailing_state: "OK"
   mailing_zipcode: "74137"

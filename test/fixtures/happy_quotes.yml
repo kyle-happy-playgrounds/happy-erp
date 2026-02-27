@@ -12,6 +12,7 @@ quote_one:
   order_subtotal: 5600.00
   adjustment_total: 5000.00
   shipment_total: 200.00
+  tax_rate: 0.1
   included_tax_total: 500.00
   shipping_street1: "2345 S. Street Ave"
   shipping_street2: ""
@@ -19,6 +20,7 @@ quote_one:
   shipping_state: "OK"
   shipping_zipcode: "12345"
   mailing_street1: "2345 S. Street Ave"
+  mailing_street2: ""
   mailing_city: "Place"
   mailing_state: "OK"
   mailing_zipcode: "12345"
@@ -50,6 +52,7 @@ quote_two:
   shipping_state: "OK"
   shipping_zipcode: "12345"
   mailing_street1: "2345 S. Street Ave"
+  mailing_street2: ""
   mailing_city: "Place"
   mailing_state: "OK"
   mailing_zipcode: "12345"
@@ -81,6 +84,7 @@ quote_three:
   shipping_state: "OK"
   shipping_zipcode: "12345"
   mailing_street1: "2345 S. Street Ave"
+  mailing_street2: ""
   mailing_city: "Place"
   mailing_state: "OK"
   terms: "Net 30 days"
