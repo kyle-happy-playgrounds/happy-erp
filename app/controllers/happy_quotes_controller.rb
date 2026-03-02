@@ -519,7 +519,7 @@ private
     elsif quoteAddress == companyAddress
       "Company Address"
     else
-      nil
+      ""
     end
   end
 
