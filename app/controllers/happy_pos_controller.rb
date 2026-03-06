@@ -353,6 +353,8 @@ before_action :find_po, only: [:show, :edit, :update, :destroy]
        @happyquote = HappyQuote.includes(:happy_customer).includes(:happy_quote_lines).where("happy_vendor_id =?", params[:vendor_id]).order("happy_quote_lines.position asc").find(params[:happy_po_id])
        @lines = @happyquote.happy_quote_lines
        puts @happypo
+       flash[:notice] = "This Purchase Order has already been finalized."
+       redirect_to happy_quote_pocreate_url(params[:happy_po_id], vendor_id: params[:vendor_id], status: 'final')
      else
        puts "no po"
      #@happyPo = HappyPo.includes(:happy_customer).includes(:happy_po_lines).where("happy_vendor_id =?", params[:vendor_id]).order("happy_po_lines.position asc").find(params[:happy_po_id])
