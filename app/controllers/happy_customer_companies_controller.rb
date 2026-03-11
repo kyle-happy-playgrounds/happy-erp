@@ -41,6 +41,8 @@ end
   def create
   @happy_customer_company = HappyCustomerCompany.new(company_params)
 
+  @happy_customer_company.user_id = current_user.id
+  @happy_customer_company.user_id_update = current_user.id
   begin
     if @happy_customer_company.save
       redirect_to @happy_customer_company, notice: "Company created."
@@ -59,6 +61,7 @@ end
   def edit; end
 
   def update
+    @happy_customer_company.user_id_update = current_user.id
     if @happy_customer_company.update(company_params)
       redirect_to @happy_customer_company, notice: "Company updated."
     else
