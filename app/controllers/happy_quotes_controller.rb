@@ -509,11 +509,11 @@ private
 
   def check_address_type
     companyAddress = [@happycustomer_company.customer_street1, @happycustomer_company.customer_street2,
-     @happycustomer_company.customer_city, @happycustomer_company.customer_state, @happycustomer_company.customer_zipcode ].map { |val| val.to_s.strip.downcase}
+     @happycustomer_company.customer_city, @happycustomer_company.customer_state, @happycustomer_company.customer_zipcode ]
     customerAddress = [@happycustomer.mailing_street1, @happycustomer.mailing_street2, @happycustomer.mailing_city,
-      @happycustomer.mailing_state, @happycustomer.mailing_zipcode].map { |val| val.to_s.strip.downcase}
+      @happycustomer.mailing_state, @happycustomer.mailing_zipcode]
     quoteAddress = [@happyquote.mailing_street1, @happyquote.mailing_street2, @happyquote.mailing_city,
-      @happyquote.mailing_state, @happyquote.mailing_zipcode].map { |val| val.to_s.strip.downcase}
+      @happyquote.mailing_state, @happyquote.mailing_zipcode]
     if quoteAddress == customerAddress
       "Customer Address"
     elsif quoteAddress == companyAddress
