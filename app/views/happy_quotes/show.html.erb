@@ -104,7 +104,7 @@
 <div class="row">
   <div class="col-8">
       <p>
-      <b>BILL TO:</b> &nbsp;<span><b><small>(<%= @address_type&.split&.first %>)</small></b></span> <br>
+      <b>BILL TO:</b> &nbsp;<span><b><small>(<%= @address_type.split[0] %>)</small></b></span> <br>
       <!-- <b>BILL TO:</b> &nbsp;<span class="badge rounded-pill bg-secondary px-1 py-1 small"><%= @address_type.split[0] %></span> <br>> -->
       <%= @happyquote.happy_customer.customer_name %><br>
       Attention: <%= @happyquote.happy_customer.first_name %> <%= @happyquote.happy_customer.last_name %><br>
