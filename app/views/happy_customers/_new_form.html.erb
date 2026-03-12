@@ -1,4 +1,5 @@
-<div class="container mb-5">
+<div class="container mb-5" data-controller="import"
+     data-import-company-value="<%= @happycustomer.happy_customer_company.to_json %>">
   <!-- <h2>Happy Customers</h2> -->
   <h2><%= @happycustomer.persisted? ? "Edit Customer" : "New Customer" %></h2>
 
@@ -11,6 +12,9 @@
     <div class="mb-3">
       <span class="text-muted">Company:</span>
       <strong><%= company.company_name %></strong>
+      <br>
+      <button class = 'btn btn-primary btn-sm' type="submit"
+      data-action="import#import_info">Import Company Info</button>
     </div>
   <% end %>
 
@@ -36,7 +40,9 @@
 
   <%#= f.input :customer_name, label: "Customer name" %>
 
-  <%= f.input :customer_name, label: "Customer name", placeholder: "Jane Smith / Accounts Payable" %>
+  <%= f.input :customer_name, label: "Customer name", placeholder: "Jane Smith / Accounts Payable", input_html:{
+        data: { import_target: "companyName" }
+      } %>
 
 
 
@@ -80,7 +86,9 @@
     </div>
 
     <div class="col-4">
-      <%= f.input :business_phone, label: false, placeholder:  "Business Phone" %>
+      <%= f.input :business_phone, label: false, placeholder:  "Business Phone", input_html:{
+        data: { import_target: "businessPhone" }
+      } %>
     </div>
 
     <div class="col-4">
@@ -92,27 +100,37 @@
 
   <div class="form-group row">
     <div class="col-12">
-      <%= f.input :mailing_street1, label: false, placeholder: "Address Line 1"%>
+      <%= f.input :mailing_street1, label: false, placeholder: "Address Line 1", input_html:{
+        data: { import_target: "street1" }
+      }%>
     </div>
   </div>
 
 
   <div class="form-group row">
     <div class="col-12">
-      <%= f.input :mailing_street2, label: false, placeholder: "Address Line 2"%>
+      <%= f.input :mailing_street2, label: false, placeholder: "Address Line 2", input_html:{
+        data: { import_target: "street2" }
+      }%>
     </div>
   </div>
 
 
   <div class="form-group row">
     <div class="col-4">
-      <%= f.input :mailing_city, label: false, placeholder: "City"%>
+      <%= f.input :mailing_city, label: false, placeholder: "City", input_html:{
+        data: { import_target: "city" }
+      }%>
     </div>
     <div class="col-4">
-      <%= f.input :mailing_state, label: false, placeholder: "State"%>
+      <%= f.input :mailing_state, label: false, placeholder: "State", input_html:{
+        data: { import_target: "state" }
+      }%>
     </div>
     <div class="col-4">
-      <%= f.input :mailing_zipcode, label: false, placeholder: "Zip"%>
+      <%= f.input :mailing_zipcode, label: false, placeholder: "Zip", input_html:{
+        data: { import_target: "zipcode" }
+      }%>
     </div>
   </div>
 
