@@ -291,9 +291,9 @@ end
   bill_lines << "<b>BILL TO</b>:"
   bill_lines << @happyquote.happy_customer.customer_name
   bill_lines << "Attention: #{@happyquote.happy_customer.first_name} #{@happyquote.happy_customer.last_name}"
-  bill_lines << @happyquote.mailing_street1 if @happyquote.mailing_street1.present?
-  bill_lines << @happyquote.mailing_street2 if @happyquote.mailing_street2.present?
-  bill_lines << "#{@happyquote.mailing_city}, #{@happyquote.mailing_state} #{@happyquote.mailing_zipcode}"
+  bill_lines << @happyquote.happy_customer.mailing_street1 if @happyquote.happy_customer.mailing_street1.present?
+  bill_lines << @happyquote.happy_customer.mailing_street2 if @happyquote.happy_customer.mailing_street2.present?
+  bill_lines << "#{@happyquote.happy_customer.mailing_city}, #{@happyquote.happy_customer.mailing_state} #{@happyquote.happy_customer.mailing_zipcode}"
   pdf.text_box(bill_lines.join("\n"), :at => [address_x,  pdf.cursor],inline_format: true)
 
   ship_lines = []
