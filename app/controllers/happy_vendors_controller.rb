@@ -29,6 +29,7 @@ class HappyVendorsController < ApplicationController
   end
 
   def update
+    @happyvendor.user_id_update = current_user.id
     if @happyvendor.update(happyvendor_params)
       flash[:success] = "Happy Vendor was successfully updated"
       redirect_to @happyvendor
@@ -39,6 +40,8 @@ class HappyVendorsController < ApplicationController
 
   def create
     @happyvendor = HappyVendor.new(happyvendor_params)
+    @happyvendor.user_id = current_user.id
+    @happyvendor.user_id_update = current_user.id
     if @happyvendor.save
       flash[:success] = "Vendor saved!"
       redirect_to @happyvendor

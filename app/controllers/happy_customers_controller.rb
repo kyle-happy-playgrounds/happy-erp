@@ -45,6 +45,7 @@ end
 
   def update
     #authorize @happycustomer
+    @happycustomer.user_id_update = current_user.id
     if @happycustomer.update(happycustomer_params)
       flash[:success] = "Happy Customer Contact was successfully updated"
       redirect_to @happycustomer
@@ -55,7 +56,8 @@ end
 
 def create
   @happycustomer = HappyCustomer.new(happycustomer_params)
-
+  @happycustomer.user_id = current_user.id
+  @happycustomer.user_id_update = current_user.id
   if @happycustomer.save
     flash[:success] = "Customer Contact saved!"
     redirect_to @happycustomer
