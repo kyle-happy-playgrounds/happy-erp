@@ -500,6 +500,19 @@ def start_create
   redirect_to new_happy_quote_path(happy_customer_id: customer_id)
 end
 
+
+   def set_status
+    quote = HappyQuote.find(params[:id])
+    status = params[:status]
+
+    HappyQuote.transaction do
+      quote.draft_siblings! if %w[won lost].include?(status)
+      quote.update!(status: status)
+    end
+
+    redirect_to quote, notice: "Quote status updated."
+  end
+
 private
 
   def find_quote
@@ -514,6 +527,7 @@ private
     @key = "hello_world.pdf"
     @s3_obj = s3.bucket(bucket_name).object(@key)
   end
+
 
   def happyquote_params
     params.require(:happy_quote).permit(

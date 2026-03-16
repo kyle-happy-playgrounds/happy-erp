@@ -23,6 +23,19 @@ class HappyQuote < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+   scope :same_family_as_number, ->(number) {
+    root = number.to_s.split("-").first
+    where("split_part(number, '-', 1) = ?", root)
+   }
+
+  def draft_siblings!
+    self.class
+      .same_family_as_number(number)
+      .where.not(id: id)
+      .update_all(status: "draft", updated_at: Time.current)
+  end
+
+
   STATUSES = {
     draft:    "draft",
     sent:     "sent",
