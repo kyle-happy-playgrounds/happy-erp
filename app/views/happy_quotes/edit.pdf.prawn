@@ -31,7 +31,7 @@ prawn_document(filename: test, disposition: "attachment") do |pdf|
   pdf.font_size font_size  
   
      #body
-     pdf.bounding_box [pdf.bounds.left, (pdf.bounds.top - 180)], :width  => pdf.bounds.width, :height => 530 do
+     pdf.bounding_box [pdf.bounds.left, (pdf.bounds.top - 180)], :width  => pdf.bounds.width + 18, :height => 530 do
      quote_items_header = ["Item", "Quantity","UOM", "Description","Color", "Unit Price", "Total"]
 
   quote_items_data = []
@@ -122,7 +122,7 @@ end
   	]
       end
 
-  pdf.table(quote_items_totals_data, :position => quote_sub_x, :width => 198) do
+  pdf.table(quote_items_totals_data, :position => quote_sub_x, :width => 215) do
     style(row(0..1).columns(0..1), :padding => [1, 5, 1, 5], :borders => [])
     style(row(0), :font_style => :bold)
     style(row(2), :background_color => 'e9e9e9', :border_color => 'dddddd', :font_style => :bold)
@@ -228,7 +228,7 @@ end
     ["Quote Amount", number_to_currency(@quotetotal + @taxAmount - @discountAmount)]
   ]
 
-  pdf.table(quote_header_data, :position => quote_header_x, :width => 138) do
+  pdf.table(quote_header_data, :position => quote_header_x, :width => 150) do
     style(row(0..1).columns(0..1), :padding => [1, 5, 1, 5], :borders => [])
     style(row(2), :background_color => 'e9e9e9', :border_color => 'dddddd', :font_style => :bold)
     style(column(1), :align => :right)
@@ -305,8 +305,10 @@ end
 
   if @happyquote.project_title.present?
     pdf.move_down 60
-    pdf.text @happyquote.project_title, align: :center, size: 11
-        pdf.stroke_horizontal_rule
+    pdf.text "<b>PROJECT:</b> #{@happyquote.project_title}", inline_format: true
+    width = 540
+    x = ((pdf.bounds.width - width) / 2) + 9
+    pdf.stroke_line [x, pdf.cursor], [x + width, pdf.cursor]
   end
   #pdf.move_cursor_to 37.0 # was 53 no idea why had to hardcode was pdf.move_cursor_to last_measured_y
   #pdf.move_up 50

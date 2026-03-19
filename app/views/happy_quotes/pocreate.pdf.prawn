@@ -273,9 +273,14 @@ end
     		style(row(0..-1).columns(0..1), :padding => [0, 5, 1, 0], :borders => [])
     		style(column(1), :align => :left)
   		end
+  if @happyquote.project_title.present?
+    pdf.move_down 10
+    pdf.text "PROJECT:  #{@happyquote.project_title}", inline_format: true
 
+  end
 
-  		pdf.move_down 105
+  		pdf.move_down 115
+      
         	
 	end
 
