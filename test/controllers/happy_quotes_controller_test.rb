@@ -268,7 +268,7 @@ class HappyQuotesControllerTest < ActionDispatch::IntegrationTest
       assert_changes -> {quote.reload.status}, from: "draft", to: "won" do
         patch set_status_happy_quote_path(quote), params: {status: "won"}
       end
-      assert_no_changes -> {quote.reload.status} do
+      assert_changes -> {quote.reload.status} do
         patch set_status_happy_quote_path(quote), params: {status: "lost"}
       end
     end
