@@ -457,28 +457,28 @@ include Reminder
   end
 
       # PATCH /happy_quotes/:id/set_status?status=pending|lost|won|open|sent|draft
-  def set_status
-    @happyquote = HappyQuote.find(params[:id])
+  # def set_status
+  #   @happyquote = HappyQuote.find(params[:id])
 
-    new_status = params[:status].to_s.downcase
+  #   new_status = params[:status].to_s.downcase
 
-    allowed = %w[draft open sent pending won lost]
-    unless allowed.include?(new_status)
-      redirect_to @happyquote, alert: "Invalid status" and return
-    end
+  #   allowed = %w[draft open sent pending won lost]
+  #   unless allowed.include?(new_status)
+  #     redirect_to @happyquote, alert: "Invalid status" and return
+  #   end
 
-    # prevent humans from overwriting finalized quotes
-    if %w[won lost].include?(@happyquote.status) && new_status != @happyquote.status
-      redirect_to @happyquote, alert: "Quote already finalized as #{@happyquote.status}." and return
-    end
+  #   # prevent humans from overwriting finalized quotes
+  #   if %w[won lost].include?(@happyquote.status) && new_status != @happyquote.status
+  #     redirect_to @happyquote, alert: "Quote already finalized as #{@happyquote.status}." and return
+  #   end
 
-    @happyquote.update!(
-      status: new_status,
-      user_id_update: current_user.id
-    )
+  #   @happyquote.update!(
+  #     status: new_status,
+  #     user_id_update: current_user.id
+  #   )
 
-    redirect_to @happyquote, notice: "Marked quote #{new_status.upcase}."
-  end
+  #   redirect_to @happyquote, notice: "Marked quote #{new_status.upcase}."
+  # end
 
 
 def start
@@ -504,6 +504,11 @@ end
    def set_status
     quote = HappyQuote.find(params[:id])
     status = params[:status]
+
+    allowed = %w[draft open sent pending won lost]
+    unless allowed.include?(status.to_s.downcase)
+      redirect_to quote, alert: "Invalid status" and return
+    end
 
     HappyQuote.transaction do
       quote.draft_siblings! if %w[won lost].include?(status)
