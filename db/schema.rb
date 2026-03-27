@@ -997,6 +997,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_13_203634) do
     t.string "user_id_update"
     t.datetime "created_at", default: -> { "now()" }, null: false
     t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.decimal "dealer_cost", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["part_number"], name: "pw_products_2021_raw_key", unique: true
   end
 
