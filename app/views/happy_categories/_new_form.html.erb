@@ -1,0 +1,34 @@
+<div class="container">
+  <h2>Happy Categories</h2>
+
+  <br>
+
+  <%#= link_to 'Home', root_path %>
+
+<%= simple_form_for @happy_category,
+  wrapper: :vertical_form,
+  wrapper_mappings: {
+    boolean:       :vertical_boolean,
+    check_boxes:   :vertical_collection,
+    date:          :vertical_multi_select,
+    datetime:      :vertical_multi_select,
+    file:          :vertical_file,
+    radio_buttons: :vertical_collection,
+    range:         :vertical_range,
+    time:          :vertical_multi_select
+  } do |f| %>
+
+  <%= f.error_notification %>
+  
+  <div class="form-group row mb-0">
+    <div class="col-sm-4">
+        <%= f.input :happy_vendor_id, :collection => @vendors, label_method: :vendor_name, label: "Category Vendor", input_html: {class: "form-select"}, required: true%>
+        <br>
+        <%= f.input :category, label: "Category Name", required: true %>
+        <br>
+        <%= f.button :submit, class: "btn-primary" %>
+        <%= link_to "Cancel", :back, class: "btn btn-outline-secondary" %>
+    </div>
+  </div>
+<% end %>
+</div>

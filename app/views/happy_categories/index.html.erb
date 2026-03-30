@@ -1,0 +1,48 @@
+<div class="container">
+  <h2>Happy Product Categories</h2>
+
+  <%= simple_form_for :search, url: happy_categories_path, method: "GET", html: { class: 'form-inline' } do |f| %>
+    <%= f.input :category, input_html: {value: ""} %>
+    <%= f.submit "Search", class: "btn btn-primary" %>
+  <% end %>
+
+  <%= page_entries_info @happy_categories %>
+  
+  <div class="table-responsive">          
+    <table class="table table-sm table-striped">
+        <thead class = "table-dark">
+        <tr>
+            <th style="width:70px;" >ID</th>
+            <th>Product Category</th>
+            <th>Vendor</th>
+            <th style="width:130px;">Product Count</th>
+            <% if current_user.admin? and (current_user.id == 1 or current_user.id == 11)%>
+              <th></th>
+            <%end%>
+        </tr>
+        </thead>
+        <tbody>
+            <% @happy_categories.each do |happy_category| %>
+            <tr>
+                <td><%= happy_category.id %></td>
+                <td><%= link_to happy_category.category, happy_category %></td>
+                <td><%= link_to HappyVendor.find(happy_category.happy_vendor_id).vendor_name,
+                 happy_vendor_path(happy_category.happy_vendor_id) %></td>
+                <td><%= HappyProduct.where("happy_category_id =?", happy_category.id).count%></td>
+                <% if current_user.admin? and (current_user.id == 1 or current_user.id == 11)%>
+                  <td class="text-end" style="white-space: nowrap;">
+                    <%= link_to "Edit", edit_happy_category_path(happy_category) %>
+                  </td>
+                  <%end%>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+  </div>
+  <%= paginate @happy_categories, window: 2%>
+  <% if current_user.admin? and (current_user.id == 1 or current_user.id == 11)%>
+    <%= link_to 'New Category', new_happy_category_path %> 
+  <%end%>
+
+</div>
+

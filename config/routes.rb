@@ -89,6 +89,7 @@ Rails.application.routes.draw do
         get '/happy_products/productinfo', action: :productinfo,  controller: 'happy_products'
         resources :happy_products
 
+        resources :happy_categories
 
         # added for jwt 11/16/2025
         namespace :api do

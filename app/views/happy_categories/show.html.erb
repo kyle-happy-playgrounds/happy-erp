@@ -1,0 +1,31 @@
+<div class="container">
+    <h3><%= @happy_category.category %> - <%=HappyVendor.find(@happy_category.happy_vendor_id).vendor_name%></h3>
+
+    <%= simple_form_for :search, url: happy_category_path, method: "GET", html: { class: 'form-inline' } do |f| %>
+        <%= f.input :part_number_or_description, input_html: {value: ""} %>
+        <%= f.submit "Search", class: "btn btn-primary" %>
+    <% end %>
+
+    <%= page_entries_info @happy_products %>
+  <div class="table-responsive">          
+    <table class="table table-sm table-striped">
+        <thead class = "table-dark">
+        <tr>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>List Price</th>
+        </tr>
+        </thead>
+        <tbody>
+            <% @happy_products.each do |prod| %>
+            <tr>
+                <td><%= link_to prod.part_number, prod %></td>
+                <td><%= prod.description %></td>
+                <td><%= prod.list_price %></td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+  </div>
+  <%= paginate @happy_products, window: 2%>
+</div>
