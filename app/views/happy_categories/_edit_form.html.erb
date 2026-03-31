@@ -23,7 +23,8 @@
   
   <div class="form-group row mb-0">
     <div class="col-sm-4">
-        <%= f.input :happy_vendor_id, :collection => @vendors, label_method: :vendor_name, label: "Category Vendor", input_html: {class: "form-select"}, required: true%>
+        <%= f.input :happy_vendor_id, :collection => @vendors, label_method: :vendor_name, label: "Category Vendor",
+         input_html: {class: "form-select"}, required: true%>
         <br>
         <%= f.input :category, label: "Category Name", required: true %>
         <br>

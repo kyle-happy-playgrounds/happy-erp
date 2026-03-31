@@ -1,11 +1,22 @@
 class HappyCategoriesController < ApplicationController
 
   def index
-    @happy_categories = HappyCategory.order(:happy_vendor_id, :category).page params[:page]
     @search = params["search"]
+    @active_vendors = HappyVendor.where(id: HappyCategory.select(:happy_vendor_id)).order(:vendor_name)
+
+    @default_vendor = @active_vendors.find_by(vendor_name: "Playworld")&.id
+    @happy_categories = HappyCategory.where("happy_vendor_id = ?", @default_vendor).order("category").page(params[:page])
+
+    if @search.present? and @search["happy_vendor_id"].present?
+    end
+
     if @search.present?
-      @name = @search["category"]
-      @happy_categories = HappyCategory.where("category ILIKE ?", "%#{@name}%").order("category DESC").page(params[:page])
+      @name = @search["category_name"]
+      if @search["happy_vendor_id"].present?
+          @default_vendor = @search["happy_vendor_id"]
+      end
+      @happy_categories = HappyCategory.where("happy_vendor_id = ? and category ILIKE ?", @default_vendor, "%#{@name}%").order("category").page(params[:page])
+    else
     end
   end
 
