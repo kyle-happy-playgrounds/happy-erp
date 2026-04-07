@@ -14,14 +14,16 @@
             <th>Part Number</th>
             <th>Description</th>
             <th>List Price</th>
+            <th>Weight</th>
         </tr>
         </thead>
         <tbody>
             <% @happy_products.each do |prod| %>
             <tr>
-                <td><%= link_to prod.part_number, prod %></td>
+                <td><%= prod.part_number %></td>
                 <td><%= prod.description %></td>
                 <td><%= prod.list_price %></td>
+                <td><%= prod.weight %>
             </tr>
             <% end %>
         </tbody>
