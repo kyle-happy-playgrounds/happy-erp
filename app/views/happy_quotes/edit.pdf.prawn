@@ -304,7 +304,7 @@ end
   pdf.text_box(ship_lines.join("\n"), :at => [quote_header_x,  pdf.cursor], inline_format: true)
 
   if @happyquote.project_title.present?
-    pdf.move_down 60
+    pdf.move_down 65
     pdf.text "<b>PROJECT:</b> #{@happyquote.project_title}", inline_format: true
     width = 540
     x = ((pdf.bounds.width - width) / 2) + 9
