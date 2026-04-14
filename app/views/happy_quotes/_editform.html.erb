@@ -3,6 +3,11 @@
 
 
 <div class="content">
+  <div>
+    <a href="#header" class="nav-up-btn">&uarr;</a>
+    <a href="#saveit" class="nav-down-btn">&darr;</a>
+  </div>
+
   <%= simple_form_for @happyquote,  data: { turbo: false } do |f| %>
   <%= f.error_notification %>
 
@@ -20,7 +25,7 @@
   </div>
   <% end %>
 
-
+  
   <h3>Edit Quote Header</h3>
   <div class='header' data-controller='newquoteheader'> 
   <%= link_to "Copy Quote", happy_quote_copy_path(:happy_quote_id => @happyquote.id,:number => @happyquote.number)  %>

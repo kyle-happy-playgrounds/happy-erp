@@ -38,6 +38,35 @@ h1 {
 	margin: 0px 0px 40px 0px;
 }
 
+.nav-up-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  padding: 14px 20px;
+  background: #2563eb;
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+.nav-down-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 14px 20px;
+  background: #2563eb;
+  color: white;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+
 @media only screen and (min-width: 576px) { 
    .form-inline label {
     padding-right: 20px;
@@ -130,4 +159,5 @@ h1 {
 #quotes-table .btn-group .btn {
   white-space: nowrap;
 }
+
 
